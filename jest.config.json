@@ -1,0 +1,13 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "clearMocks": true,
+  "rootDir": ".",
+  "moduleNameMapper": {
+    "^@app(.*)$": "<rootDir>/src/$1"
+  },
+  "testEnvironment": "node",
+  "testRegex":  "/test/.*\\.spec.ts",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
+}
