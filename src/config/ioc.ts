@@ -7,6 +7,7 @@ export const MODULE_TOKENS = {
   Env: Symbol.for('Env'),
   Repository: Symbol.for('Repository'),
   KnexClient: Symbol.for('KnexClient'),
+  Logger: Symbol.for('Logger'),
 };
 
 export const OPTIONS_TOKENS = {

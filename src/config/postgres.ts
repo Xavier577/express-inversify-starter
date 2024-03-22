@@ -3,14 +3,12 @@ import pg from 'pg';
 import { Env } from '@app/internal/env';
 import process from 'process';
 import Deasyncify from 'deasyncify';
+import { Logger } from '@app/internal/logger';
 
 pg.types.setTypeParser(pg.types.builtins.NUMERIC, parseFloat);
 pg.types.setTypeParser(pg.types.builtins.INT8, Number);
 
-export async function postgresFactory(
-  env: Env,
-  logger: Console,
-): Promise<Knex> {
+export async function postgresFactory(env: Env, logger: Logger): Promise<Knex> {
   const pg = knex({
     client: 'pg',
     connection: {
@@ -43,7 +41,7 @@ export async function postgresFactory(
       current_database != null &&
       current_database != env.get<string>('PG_DATABASE')
     ) {
-      err = new Error(`database ${env.get<string>('PG_DATABASE')} not found`);
+      throw new Error(`database ${env.get<string>('PG_DATABASE')} not found`);
     }
 
     if (err != null) {
@@ -52,7 +50,7 @@ export async function postgresFactory(
       logger.log(`Failed to connect to database ........ retry (${retry})`);
 
       if (retry < 1) {
-        logger.error('Exiting....');
+        logger.log('Exiting....');
         process.exit(1);
       }
 

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { Logger } from '@app/internal/logger';
 
 /*
  * Captures and stores the body of the response in `Request.locals.body` whenever
@@ -28,7 +29,7 @@ function hasUserAgent(req: Request, ignore: RegExp[]) {
  * @param logger octonent logger
  * @param ignore user agents of requests to ignore
  */
-export function logRequest(logger: Console, ignore = []) {
+export function logRequest(logger: Logger, ignore = []) {
   return function (req: Request, _res: Response, next: NextFunction) {
     // ignore some user agents
     if (hasUserAgent(req, ignore)) {

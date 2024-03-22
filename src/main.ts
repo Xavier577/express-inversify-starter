@@ -14,9 +14,15 @@ import { Jwt, JwtOptions } from '@app/modules/jwt';
 import { UserService } from '@app/services/user/user.service';
 import { App } from './app';
 import { isHealthy } from '@app/config/health';
+import { Logger } from '@app/internal/logger';
+import { defaultSerializers } from '@app/internal/logger/serializers';
 
 export async function bootstrap() {
   const container = new Container();
+
+  const logger = new Logger({ name: 'eis', serializers: defaultSerializers() });
+
+  container.bind<Logger>(MODULE_TOKENS.Logger).toConstantValue(logger);
 
   container.bind<Env>(MODULE_TOKENS.Env).to(Env);
 
@@ -24,7 +30,7 @@ export async function bootstrap() {
 
   env.load(envValidator);
 
-  const pg = await postgresFactory(env, console);
+  const pg = await postgresFactory(env, logger);
 
   container.bind<Knex>(MODULE_TOKENS.KnexClient).toConstantValue(pg);
 
@@ -37,18 +43,18 @@ export async function bootstrap() {
 
   container.bind<UserService>(SERVICE_TOKENS.UserService).to(UserService);
 
-  const app = new App(container, console, () => isHealthy(pg));
+  const app = new App(container, logger, () => isHealthy(pg));
 
   const httpServer = http.createServer(app.server.build());
 
   httpServer.listen(env.get<string>('PORT'));
 
   httpServer.on('listening', () => {
-    console.log(`listening on port ${env.get<string>('PORT')}`);
+    logger.log(`listening on port ${env.get<string>('PORT')}`);
   });
 
   process.on('SIGTERM', async () => {
-    console.log('exiting aplication...');
+    logger.log('exiting application...');
 
     httpServer.close(() => {
       process.exit(0);

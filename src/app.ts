@@ -14,12 +14,13 @@ import {
   captureBody,
   logRequest,
 } from '@app/http/middlewares/request-logging.middleware';
+import { Logger } from '@app/internal/logger';
 
 export class App {
   readonly server: InversifyExpressServer;
   constructor(
     container: Container,
-    logger: Console,
+    logger: Logger,
     healthCheck = () => Promise.resolve(),
   ) {
     const env = container.get<Env>(MODULE_TOKENS.Env);
