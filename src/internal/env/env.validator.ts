@@ -12,8 +12,6 @@ export default Joi.object({
     otherwise: Joi.bool().default(false),
   }),
 
-  MQ_CONNECTION_URL: Joi.string().required(),
-
   NODE_ENV: Joi.string()
     .valid(AppEnv.DEVELOPMENT, AppEnv.TEST, AppEnv.STAGING, AppEnv.PRODUCTION)
     .default(AppEnv.DEVELOPMENT),
