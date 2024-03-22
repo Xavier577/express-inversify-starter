@@ -6,7 +6,7 @@ import { Logger } from '@app/internal/logger';
  * `Response.json` is called
  * @param _req express request
  * @param res express response
- * @param next next middleware function
+ * @param next nextFunction middleware function
  */
 export function captureBody(_req: Request, res: Response, next: NextFunction) {
   const json = res.json;
@@ -26,7 +26,7 @@ function hasUserAgent(req: Request, ignore: RegExp[]) {
 
 /**
  * Create middleware to log requests
- * @param logger octonent logger
+ * @param logger internal logger
  * @param ignore user agents of requests to ignore
  */
 export function logRequest(logger: Logger, ignore = []) {
@@ -36,7 +36,7 @@ export function logRequest(logger: Logger, ignore = []) {
       return next();
     }
 
-    logger.log(req);
+    logger.request(req);
     next();
   };
 }
