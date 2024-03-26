@@ -48,6 +48,7 @@
     "module-alias": "^2.2.3",
     "nodemon": "^3.1.0",
     "postgrator": "^5.0.0",
+    "prettier": "^3.2.5",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
